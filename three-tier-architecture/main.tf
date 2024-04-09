@@ -232,6 +232,7 @@ resource "aws_security_group" "database-sg" {
     to_port     = 65535
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+  # Drata: Ensure that [aws_security_group.egress.cidr_blocks] is explicitly defined and narrowly scoped to only allow traffic to trusted sources
   }
 
   tags = {
