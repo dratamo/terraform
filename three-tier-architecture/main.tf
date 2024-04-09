@@ -241,7 +241,7 @@ resource "aws_security_group" "database-sg" {
 
 resource "aws_lb" "external-elb" {
   name               = "External-LB"
-  internal           = false
+  internal           = true
   load_balancer_type = "application"
   security_groups    = [aws_security_group.web-sg.id]
   subnets            = [aws_subnet.web-subnet-1.id, aws_subnet.web-subnet-2.id]
