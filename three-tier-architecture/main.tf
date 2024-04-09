@@ -277,7 +277,7 @@ resource "aws_lb_target_group_attachment" "external-elb2" {
 resource "aws_lb_listener" "external-elb" {
   load_balancer_arn = aws_lb.external-elb.arn
   port              = "80"
-  protocol          = "HTTP"
+  protocol          = "HTTPS"
 
   default_action {
     type             = "forward"
