@@ -23,6 +23,7 @@ resource "aws_ecs_task_definition" "service" {
 }
 
 resource "aws_ecs_service" "centos" {
+  # Drata: Default network security groups allow broader access than required. Specify [aws_ecs_service.network_configuration.security_groups] to configure more granular access control
   name            = "centos"
   cluster         = aws_ecs_cluster.default.arn
   task_definition = aws_ecs_task_definition.service.arn
