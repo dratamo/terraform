@@ -25,7 +25,7 @@ resource "aws_subnet" "web-subnet-1" {
   vpc_id                  = aws_vpc.my-vpc.id
   cidr_block              = "10.0.1.0/24"
   availability_zone       = "us-east-1a"
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch = false
 
   tags = {
     Name = "Web-1a"
@@ -36,7 +36,7 @@ resource "aws_subnet" "web-subnet-2" {
   vpc_id                  = aws_vpc.my-vpc.id
   cidr_block              = "10.0.2.0/24"
   availability_zone       = "us-east-1b"
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch = false
 
   tags = {
     Name = "Web-2b"
@@ -232,6 +232,7 @@ resource "aws_security_group" "database-sg" {
     to_port     = 65535
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+  # Drata: Ensure that [aws_security_group.egress.cidr_blocks] is explicitly defined and narrowly scoped to only allow traffic to trusted sources
   }
 
   tags = {
@@ -241,7 +242,7 @@ resource "aws_security_group" "database-sg" {
 
 resource "aws_lb" "external-elb" {
   name               = "External-LB"
-  internal           = false
+  internal           = true
   load_balancer_type = "application"
   security_groups    = [aws_security_group.web-sg.id]
   subnets            = [aws_subnet.web-subnet-1.id, aws_subnet.web-subnet-2.id]
@@ -277,7 +278,7 @@ resource "aws_lb_target_group_attachment" "external-elb2" {
 resource "aws_lb_listener" "external-elb" {
   load_balancer_arn = aws_lb.external-elb.arn
   port              = "80"
-  protocol          = "HTTP"
+  protocol          = "HTTPS"
 
   default_action {
     type             = "forward"
